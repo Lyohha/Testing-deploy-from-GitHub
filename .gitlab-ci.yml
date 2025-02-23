@@ -1,0 +1,46 @@
+Build server:
+  stage: build
+  image: docker:latest
+  # when: manual
+  services:
+    - docker:dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE:laravel-latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:laravel-latest --tag $CI_REGISTRY_IMAGE:laravel-latest --tag $CI_REGISTRY_IMAGE:laravel-$CI_COMMIT_SHA -f ./Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE:laravel-$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE:laravel-latest
+  only:
+    - master
+    - dev
+
+Create Zip Archive:
+  stage: build
+  image: alpine
+  # when: manual
+  before_script:
+    - apk add --update zip
+  script:
+    - zip -r source.zip ./
+  artifacts:
+    paths:
+      - source.zip
+  only:
+    - main
+
+Create Zip Archive Package:
+  stage: build
+  image: alpine
+  before_script:
+    - apk add --update zip curl
+  script:
+    - zip -r source.zip ./
+    - 'curl 
+        --header "JOB-TOKEN: $CI_JOB_TOKEN"
+        --upload-file source.zip
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/Source/1.0.2/source.zip"'
+  # only:
+  #   variables:
+  #     - $CI_COMMIT_TAG =~ /^\d+.\d+.\d+*$/
+  only:
+    - main
