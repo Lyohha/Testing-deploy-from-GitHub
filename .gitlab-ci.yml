@@ -13,11 +13,12 @@ Build server:
   only:
     - master
     - dev
+    - main
 
 Create Zip Archive:
   stage: build
   image: alpine
-  # when: manual
+  when: manual
   before_script:
     - apk add --update zip
   script:
@@ -31,6 +32,7 @@ Create Zip Archive:
 Create Zip Archive Package:
   stage: build
   image: alpine
+  when: manual
   before_script:
     - apk add --update zip curl
   script:
