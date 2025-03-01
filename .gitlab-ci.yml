@@ -46,3 +46,20 @@ Create Zip Archive Package:
   #     - $CI_COMMIT_TAG =~ /^\d+.\d+.\d+*$/
   only:
     - main
+
+Deploy as files:
+  stage: deploy
+  # when: manual
+  image: alpine
+  before_script:
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostkeyChecking no\n\n" > ~/.ssh/config'
+    - ssh-keyscan $SSH_SERVER >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - chmod 700 ~/.ssh
+  script:
+    - ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && git checkout $MAIN_BRANCH && git pull && exit"
+  only:
+    - main
