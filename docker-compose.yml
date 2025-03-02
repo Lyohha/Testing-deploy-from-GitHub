@@ -1,0 +1,5 @@
+backend: 
+        image: ${CI_REGISTRY_IMAGE}:test-latest
+        # container_name: ${CI_PROJECT_NAME}_backend
+        ports:
+            - "81:80"
