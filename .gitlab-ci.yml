@@ -60,6 +60,7 @@ Deploy as files:
     - ssh-keyscan $SSH_SERVER >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - chmod 700 ~/.ssh
+    - ssh $SSH_USER@$SSH_SERVER "rm -rf $WORK_DIR/*"
   script:
     - scp -r . $SSH_USER@$SSH_SERVER:$WORK_DIR
     # - ssh $SSH_USER@$SSH_SERVER -tt "cd $WORK_DIR && git checkout main && git pull && exit"
