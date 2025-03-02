@@ -1,7 +1,7 @@
 Build server:
   stage: build
   image: docker:latest
-  # when: manual
+  when: manual
   services:
     - docker:dind
   script:
@@ -70,7 +70,8 @@ Deploy as files:
 Deploy docker container:
   stage: deploy
   # when: manual
-  image: creatiwww/docker-compose:latest
+  # image: creatiwww/docker-compose:latest
+  image: docker:latest
   services:
     - docker:dind
   before_script:
