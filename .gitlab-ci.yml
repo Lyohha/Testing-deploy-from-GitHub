@@ -61,6 +61,7 @@ Deploy as files:
     - chmod 644 ~/.ssh/known_hosts
     - chmod 700 ~/.ssh
   script:
-    - ssh $SSH_USER@$SSH_SERVER "cd $WORK_DIR && git checkout main && git pull && exit"
+    - scp -r . $SSH_USER@$SSH_SERVER:$WORK_DIR
+    # - ssh $SSH_USER@$SSH_SERVER -tt "cd $WORK_DIR && git checkout main && git pull && exit"
   only:
     - main
