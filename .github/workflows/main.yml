@@ -26,26 +26,34 @@ jobs:
       - name: Set env
         run: echo "GH_REGISTRY_IMAGE=${{ steps.meta.outputs.tags }}" >> $GITHUB_ENV
       
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io  # GitHub Container Registry
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      # - uses: alex-ac/github-action-ssh-docker-compose@master
-      #   name: Docker compose down
+      # - name: Login to GitHub Container Registry
+      #   uses: docker/login-action@v1
       #   with:
-      #     ssh_host: ${{ secrets.SSH_SERVER }}
-      #     ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     ssh_user: ${{ secrets.SSH_USER }}
-      #     docker_compose_prefix: 'gh_'
-      #     docker_compose_down: 'true'
+      #     registry: ghcr.io  # GitHub Container Registry
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
 
-      # - uses: alex-ac/github-action-ssh-docker-compose@master
-      #   name: Docker-Compose Remote Deployment
-      #   with:
-      #     ssh_host: ${{ secrets.SSH_SERVER }}
-      #     ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     ssh_user: ${{ secrets.SSH_USER }}
-      #     docker_compose_prefix: 'gh_'
+      - name: Remote auth Docker in GitHub Registry
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+      
+      - uses: alex-ac/github-action-ssh-docker-compose@master
+        name: Docker compose down
+        with:
+          ssh_host: ${{ secrets.SSH_SERVER }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_user: ${{ secrets.SSH_USER }}
+          docker_compose_prefix: 'gh_'
+          docker_compose_down: 'true'
+
+      - uses: alex-ac/github-action-ssh-docker-compose@master
+        name: Docker-Compose Remote Deployment
+        with:
+          ssh_host: ${{ secrets.SSH_SERVER }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_user: ${{ secrets.SSH_USER }}
+          docker_compose_prefix: 'gh_'
