@@ -41,7 +41,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
       
-      - uses: alex-ac/github-action-ssh-docker-compose@master
+      - uses: matiasnu/github-action-ssh-docker-compose@v2.0.3
         name: Docker compose down
         with:
           ssh_host: ${{ secrets.SSH_SERVER }}
@@ -50,7 +50,7 @@ jobs:
           docker_compose_prefix: 'gh_'
           docker_compose_down: 'true'
 
-      - uses: alex-ac/github-action-ssh-docker-compose@master
+      - uses: matiasnu/github-action-ssh-docker-compose@v2.0.3
         name: Docker-Compose Remote Deployment
         with:
           ssh_host: ${{ secrets.SSH_SERVER }}
