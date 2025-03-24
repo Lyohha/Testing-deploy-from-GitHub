@@ -49,6 +49,7 @@ jobs:
           ssh_user: ${{ secrets.SSH_USER }}
           docker_compose_prefix: 'gh_'
           docker_compose_down: 'true'
+          docker_compose_filename: 'docker-compose.yml'
 
       - uses: matiasnu/github-action-ssh-docker-compose@v2.0.3
         name: Docker-Compose Remote Deployment
@@ -57,3 +58,4 @@ jobs:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh_user: ${{ secrets.SSH_USER }}
           docker_compose_prefix: 'gh_'
+          docker_compose_filename: 'docker-compose.yml'
