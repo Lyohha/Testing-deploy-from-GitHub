@@ -41,6 +41,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
       
+      - name: Checking file
+        run: cat docker-compose.yml
       
       # - name: Docker compose down and deploy
       #   uses: appleboy/ssh-action@v1
