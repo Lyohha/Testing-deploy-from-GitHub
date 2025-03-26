@@ -39,10 +39,13 @@ jobs:
           host: ${{ secrets.SSH_SERVER }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          script: |
+            docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+            export GH_REGISTRY_IMAGE=${{ steps.meta.outputs.tags }}"
       
-      - name: Checking file
-        run: cat docker-compose.yml
+      
+      # - name: Checking file
+      #   run: cat docker-compose.yml
       
       # - name: Docker compose down and deploy
       #   uses: appleboy/ssh-action@v1
@@ -55,15 +58,15 @@ jobs:
       #       docker compose -H "ssh://$SSH_USER@$SSH_SERVER" pull
       #       docker compose -H "ssh://$SSH_USER@$SSH_SERVER" up -d
       
-      # - uses: matiasnu/github-action-ssh-docker-compose@v2.0.3
-      #   name: Docker compose down
-      #   with:
-      #     ssh_host: ${{ secrets.SSH_SERVER }}
-      #     ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     ssh_user: ${{ secrets.SSH_USER }}
-      #     docker_compose_prefix: 'gh_'
-      #     docker_compose_down: 'true'
-      #     docker_compose_filename: 'docker-compose.yml'
+      - uses: matiasnu/github-action-ssh-docker-compose@v2.0.3
+        name: Docker compose down
+        with:
+          ssh_host: ${{ secrets.SSH_SERVER }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_user: ${{ secrets.SSH_USER }}
+          docker_compose_prefix: 'gh_'
+          docker_compose_down: 'true'
+          docker_compose_filename: 'docker-compose.yml'
 
       - uses: matiasnu/github-action-ssh-docker-compose@v2.0.3
         name: Docker-Compose Remote Deployment
