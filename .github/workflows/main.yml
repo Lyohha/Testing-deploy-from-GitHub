@@ -41,7 +41,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
-            export GH_REGISTRY_IMAGE=${{ steps.meta.outputs.tags }}"
+            export GH_REGISTRY_IMAGE=${{ steps.meta.outputs.tags }}
       
       
       # - name: Checking file
