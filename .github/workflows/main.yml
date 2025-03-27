@@ -14,5 +14,5 @@ jobs:
       - name: Checkout and login
         uses: actions/checkout@v3
 
-      - name: Remove outdated files
-        run: echo ${{ github.var.WOKR_DIR }}
+      - name: Remove outdated file
+        run: echo "${{ github.var.WOKR_DIR }}"
