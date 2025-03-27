@@ -21,8 +21,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            rm -rf ${{ var.WOKR_DIR }}
-            mkdir -p ${{ var.WOKR_DIR }}
+            rm -rf ${{ vars.WORK_DIR }}
+            mkdir -p ${{ vars.WORK_DIR }}
       
       - name: Copy files
         uses: appleboy/scp-action@v0.1.7
@@ -31,4 +31,4 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "."
-          target: ${{ var.WOKR_DIR }}
+          target: ${{ vars.WORK_DIR }}
