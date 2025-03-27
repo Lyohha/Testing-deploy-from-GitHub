@@ -15,4 +15,4 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Remove outdated files
-        run: echo ${{ github.vars.WOKR_DIR }}
+        run: echo ${{ github.var.WOKR_DIR }}
