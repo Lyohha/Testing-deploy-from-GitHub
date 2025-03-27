@@ -14,5 +14,21 @@ jobs:
       - name: Checkout and login
         uses: actions/checkout@v3
 
-      - name: Remove outdated file
-        run: echo "${{ vars.WOKR_DIR }}"
+      - name: Remove outdated files
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            rm -rf ${{ var.WOKR_DIR }}
+            mkdir -p ${{ var.WOKR_DIR }}
+      
+      - name: Copy files
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "."
+          target: ${{ var.WOKR_DIR }}
