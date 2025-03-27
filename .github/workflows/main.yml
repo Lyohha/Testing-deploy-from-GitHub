@@ -9,26 +9,26 @@ jobs:
   deploy:
     name: Deploy (copy method)
     runs-on: [self-hosted]
-
+    
     steps:
       - name: Checkout and login
         uses: actions/checkout@v3
-    
-    - name: Remove outdated files
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_SERVER }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            rm -rf ${{ vars.WOKR_DIR }}
-            mkdir -R ${{ vars.WOKR_DIR }}
-    
-    - name: Copy files
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_SERVER }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "."
-          target: ${{ vars.WOKR_DIR }}
+
+      - name: Remove outdated files
+          uses: appleboy/ssh-action@v1
+          with:
+            host: ${{ secrets.SSH_SERVER }}
+            username: ${{ secrets.SSH_USER }}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            script: |
+              rm -rf ${{ vars.WOKR_DIR }}
+              mkdir -R ${{ vars.WOKR_DIR }}
+      
+      - name: Copy files
+          uses: appleboy/scp-action@v0.1.7
+          with:
+            host: ${{ secrets.SSH_SERVER }}
+            username: ${{ secrets.SSH_USER }}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            source: "."
+            target: ${{ vars.WOKR_DIR }}
